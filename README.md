@@ -96,3 +96,10 @@ backend/src/main/java/com/hostelsync/
 frontend/src/
   pages/ components/ api.js AuthContext.jsx
 ```
+
+## Deployment (Vercel + Railway)
+1. **Railway**: New Project -> add a MySQL database. Then add a service from this GitHub repo with root directory `backend` (it builds with the Dockerfile).
+   Set variables: `DB_URL` (`jdbc:mysql://<host>:<port>/<db>?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true`),
+   `DB_USER`, `DB_PASSWORD`, `JWT_SECRET`, `CORS_ORIGIN` (your Vercel link), plus `CLOUDINARY_*` and `MAIL_*`. Generate a public domain for the service.
+2. **Vercel**: import this repo, root directory `frontend`, set `VITE_API_URL` to `https://<railway-domain>/api`. Deploy to get your public link.
+3. Put the Vercel link into Railway's `CORS_ORIGIN` and redeploy.
