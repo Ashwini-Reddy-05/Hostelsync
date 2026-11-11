@@ -11,4 +11,7 @@ public interface OutPassRepository extends JpaRepository<OutPass, Long> {
     List<OutPass> findByStudentOrderByCreatedAtDesc(User student);
     List<OutPass> findByStatusOrderByCreatedAtDesc(OutPassStatus status);
     List<OutPass> findAllByOrderByCreatedAtDesc();
+    long countByStatus(OutPassStatus status);
+    List<OutPass> findByStatusAndOutTimeLessThanEqualAndExpectedReturnGreaterThanEqual(
+            OutPassStatus status, java.time.LocalDateTime now1, java.time.LocalDateTime now2);
 }

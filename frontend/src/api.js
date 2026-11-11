@@ -17,7 +17,7 @@ api.interceptors.response.use(
     if (err.response?.status === 401 && !err.config.url.includes('/auth/')) {
       localStorage.removeItem('hs_token');
       localStorage.removeItem('hs_user');
-      window.location.href = '/login';
+      window.location.href = '/';
     }
     return Promise.reject(err);
   }

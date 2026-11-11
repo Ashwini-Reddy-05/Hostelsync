@@ -17,7 +17,7 @@ export default function Navbar() {
             className="btn btn-outline"
             onClick={() => {
               logout();
-              navigate('/login');
+              navigate('/');
             }}
           >
             Logout

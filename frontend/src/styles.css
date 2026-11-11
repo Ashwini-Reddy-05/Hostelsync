@@ -97,3 +97,11 @@ td .btn { margin-top: 0; }
   .span2 { grid-column: auto; }
   table { display: block; overflow-x: auto; }
 }
+
+.role-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 20px; }
+.role-card { text-align: center; text-decoration: none; color: inherit; transition: transform .15s, box-shadow .15s; }
+.role-card:hover { transform: translateY(-3px); box-shadow: 0 6px 18px rgba(59, 91, 219, .15); }
+.role-icon { font-size: 2.4rem; }
+.section { margin: 18px 0 0; color: var(--muted); font-size: .85rem; text-transform: uppercase; letter-spacing: .04em; }
+.stat.good b { color: var(--green); }
+.stat.warn b { color: var(--amber); }

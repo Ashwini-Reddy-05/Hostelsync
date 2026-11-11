@@ -12,7 +12,7 @@ public final class Dtos {
 
     private Dtos() {}
 
-    public record LoginRequest(@NotBlank @Email String email, @NotBlank String password) {}
+    public record LoginRequest(@NotBlank @Email String email, @NotBlank String password, String role) {}
 
     public record RegisterRequest(@NotBlank String name,
                                   @NotBlank @Email String email,

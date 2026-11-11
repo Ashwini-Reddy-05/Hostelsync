@@ -11,4 +11,5 @@ public interface ComplaintRepository extends JpaRepository<Complaint, Long> {
     List<Complaint> findByStudentOrderByCreatedAtDesc(User student);
     List<Complaint> findByStatusOrderByCreatedAtDesc(ComplaintStatus status);
     List<Complaint> findAllByOrderByCreatedAtDesc();
+    long countByStatus(ComplaintStatus status);
 }

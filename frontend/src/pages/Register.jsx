@@ -45,7 +45,7 @@ export default function Register() {
         <button className="btn" disabled={loading}>{loading ? 'Creating…' : 'Register'}</button>
       </form>
       <p className="muted">
-        Already registered? <Link to="/login">Sign in</Link>
+        Already registered? <Link to="/login/student">Sign in</Link>
       </p>
     </div>
   );

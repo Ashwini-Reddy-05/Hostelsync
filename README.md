@@ -29,7 +29,7 @@ Spring Boot REST API (:8080)
 | WARDEN | Approve/reject out-passes, manage rooms and allocation, view mess headcount and ratings, view complaints |
 | TECHNICIAN | View complaints, set status Pending / In Progress / Resolved with a note |
 
-Students self-register. Demo staff accounts are seeded on first run:
+Each role has its own login page (Student / Warden / Technician) on the home screen. Students self-register. Demo staff accounts are seeded on first run:
 - warden@hostelsync.com / warden123
 - tech@hostelsync.com / tech123
 

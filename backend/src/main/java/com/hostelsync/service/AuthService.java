@@ -55,6 +55,11 @@ public class AuthService {
         String email = req.email().trim().toLowerCase();
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, req.password()));
         User user = userRepository.findByEmail(email).orElseThrow();
+        if (req.role() != null && !req.role().isBlank()
+                && !user.getRole().name().equalsIgnoreCase(req.role())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                    "This is not a " + req.role().toLowerCase() + " account. Please use the correct login page.");
+        }
         return toResponse(user);
     }
 

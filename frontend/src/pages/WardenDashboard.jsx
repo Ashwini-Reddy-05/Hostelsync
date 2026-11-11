@@ -197,9 +197,9 @@ function ComplaintsTab() {
   useEffect(() => { api.get('/complaints').then((r) => setList(r.data)); }, []);
   return (
     <div className="card">
-      <h3>All complaints (read-only)</h3>
+      <h3>Student complaints &amp; technician progress</h3>
       <table>
-        <thead><tr><th>Student</th><th>Category</th><th>Details</th><th>Photo</th><th>Status</th></tr></thead>
+        <thead><tr><th>Student</th><th>Category</th><th>Details</th><th>Photo</th><th>Status</th><th>Technician note</th><th>Last updated</th></tr></thead>
         <tbody>
           {list.map((c) => (
             <tr key={c.id}>
@@ -207,21 +207,89 @@ function ComplaintsTab() {
               <td>{c.category}</td><td>{c.description}</td>
               <td>{c.imageUrl ? <a href={c.imageUrl} target="_blank" rel="noreferrer"><img className="thumb" src={c.imageUrl} alt="complaint" /></a> : '-'}</td>
               <td><StatusBadge status={c.status} /></td>
+              <td>{c.technicianRemark || '-'}</td>
+              <td>{fmt(c.updatedAt)}</td>
             </tr>
           ))}
-          {list.length === 0 && <tr><td colSpan="5" className="muted">No complaints</td></tr>}
+          {list.length === 0 && <tr><td colSpan="7" className="muted">No complaints</td></tr>}
         </tbody>
       </table>
     </div>
   );
 }
 
+function Stat({ value, label, tone }) {
+  return (
+    <div className={`stat ${tone || ''}`}>
+      <b>{value}</b><span>{label}</span>
+    </div>
+  );
+}
+
+function OverviewTab() {
+  const [o, setO] = useState(null);
+  const [mess, setMess] = useState(null);
+  const load = () => {
+    api.get('/warden/overview').then((r) => setO(r.data));
+    api.get('/mess/report', { params: { date: today() } }).then((r) => setMess(r.data));
+  };
+  useEffect(() => { load(); }, []);
+  if (!o) return <p className="muted">Loading…</p>;
+
+  return (
+    <>
+      <div className="row"><h3>Hostel today</h3><button className="btn btn-outline" onClick={load}>Refresh</button></div>
+      <h4 className="section">Student headcount</h4>
+      <div className="stats">
+        <Stat value={o.totalStudents} label="Registered students" />
+        <Stat value={o.studentsInHostel} label="In hostel now" tone="good" />
+        <Stat value={o.studentsOut} label="Out on approved out-pass" tone="warn" />
+        <Stat value={o.pendingOutPasses} label="Out-passes awaiting approval" />
+      </div>
+
+      <h4 className="section">Mess headcount today (students eating)</h4>
+      <div className="stats">
+        {(mess?.headcount || []).map((h) => <Stat key={h.mealType} value={h.count} label={h.mealType} />)}
+      </div>
+
+      <h4 className="section">Room availability</h4>
+      <div className="stats">
+        <Stat value={o.rooms.totalRooms} label="Rooms" />
+        <Stat value={o.rooms.totalBeds} label="Total beds" />
+        <Stat value={o.rooms.occupiedBeds} label="Occupied" />
+        <Stat value={o.rooms.availableBeds} label="Available beds" tone="good" />
+      </div>
+
+      <h4 className="section">Complaints</h4>
+      <div className="stats">
+        <Stat value={o.complaintsPending} label="Pending" tone="warn" />
+        <Stat value={o.complaintsInProgress} label="In progress" />
+        <Stat value={o.complaintsResolved} label="Resolved" tone="good" />
+      </div>
+
+      <div className="card">
+        <h3>Students currently out</h3>
+        <table>
+          <thead><tr><th>Student</th><th>Room</th><th>Destination</th><th>Expected return</th></tr></thead>
+          <tbody>
+            {o.studentsOutList.map((s, i) => (
+              <tr key={i}><td>{s.name}</td><td>{s.room || '-'}</td><td>{s.destination}</td><td>{fmt(s.expectedReturn)}</td></tr>
+            ))}
+            {o.studentsOutList.length === 0 && <tr><td colSpan="4" className="muted">Everyone is in the hostel</td></tr>}
+          </tbody>
+        </table>
+      </div>
+    </>
+  );
+}
+
 export default function WardenDashboard() {
-  const [tab, setTab] = useState('Out-passes');
+  const [tab, setTab] = useState('Overview');
   return (
     <>
       <h2>Warden dashboard</h2>
-      <Tabs tabs={['Out-passes', 'Rooms', 'Mess', 'Complaints']} active={tab} onChange={setTab} />
+      <Tabs tabs={['Overview', 'Out-passes', 'Rooms', 'Mess', 'Complaints']} active={tab} onChange={setTab} />
+      {tab === 'Overview' && <OverviewTab />}
       {tab === 'Out-passes' && <OutPassTab />}
       {tab === 'Rooms' && <RoomsTab />}
       {tab === 'Mess' && <MessTab />}
