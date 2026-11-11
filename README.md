@@ -103,3 +103,9 @@ frontend/src/
    `DB_USER`, `DB_PASSWORD`, `JWT_SECRET`, `CORS_ORIGIN` (your Vercel link), plus `CLOUDINARY_*` and `MAIL_*`. Generate a public domain for the service.
 2. **Vercel**: import this repo, root directory `frontend`, set `VITE_API_URL` to `https://<railway-domain>/api`. Deploy to get your public link.
 3. Put the Vercel link into Railway's `CORS_ORIGIN` and redeploy.
+
+## Troubleshooting login
+1. Backend running? Open http://localhost:8080/api/auth/health - it must show {"status":"ok"}.
+2. Backend console must say `Tomcat started on port 8080`. If it crashed, check the MySQL password (application.properties line 7) and that MySQL is running.
+3. Frontend: delete any old `frontend/.env` (or leave `VITE_API_URL=` empty), then restart `npm run dev`.
+4. Open the site at http://localhost:5173 and use the login page for your role.

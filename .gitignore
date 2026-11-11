@@ -5,3 +5,8 @@ frontend/.env
 .idea/
 .vscode/
 *.log
+.classpath
+.factorypath
+.project
+.settings/
+desktop.ini

@@ -25,6 +25,12 @@ public class AuthController {
         this.userService = userService;
     }
 
+    /** Open http://localhost:8080/api/auth/health in a browser to check the backend is up. */
+    @GetMapping("/auth/health")
+    public java.util.Map<String, String> health() {
+        return java.util.Map.of("status", "ok");
+    }
+
     @PostMapping("/auth/register")
     public AuthResponse register(@Valid @RequestBody RegisterRequest req) {
         return authService.register(req);

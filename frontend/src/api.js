@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8080/api',
+  baseURL: import.meta.env.VITE_API_URL || '/api',
 });
 
 api.interceptors.request.use((config) => {
@@ -23,7 +23,11 @@ api.interceptors.response.use(
   }
 );
 
-export const errMsg = (err, fallback = 'Something went wrong') =>
-  err.response?.data?.message || fallback;
+export const errMsg = (err, fallback = 'Something went wrong') => {
+  if (!err.response) {
+    return 'Cannot reach the backend. Start it and check http://localhost:8080/api/auth/health shows {"status":"ok"}.';
+  }
+  return err.response.data?.message || `${fallback} (server returned ${err.response.status})`;
+};
 
 export default api;
